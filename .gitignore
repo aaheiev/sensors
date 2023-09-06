@@ -10,3 +10,5 @@ bundled
 coverage
 pkg
 tmp
+/.secrets
+!/.secrets/.keep
