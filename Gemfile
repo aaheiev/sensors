@@ -4,6 +4,10 @@ gem "jets", "~> 4.0.0"
 
 
 gem "zeitwerk", ">= 2.5.0"
+gem "pg", "~> 1.5.4"
+gem 'lockbox'
+gem "faraday", "~> 2.7.10"
+gem 'composite_primary_keys'
 
 # development and test groups are not bundled as part of the deployment
 group :development, :test do

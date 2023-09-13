@@ -1,0 +1,26 @@
+---
+version: '3.9'
+secrets:
+  db_password:
+    file: .secrets/db-password
+services:
+  database:
+    image:                    timescale/timescaledb:latest-pg14-oss
+    environment:
+      POSTGRES_USER:          sensors
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      POSTGRES_DB:            sensors
+    volumes:
+      - database:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    secrets:
+      - db_password
+    healthcheck:
+      test:                   ["CMD", "pg_isready", "-U", "sensors"]
+      interval:               5s
+      timeout:                5s
+      retries:                5
+    restart:                  unless-stopped
+volumes:
+  database:                   {}

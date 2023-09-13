@@ -96,12 +96,18 @@ GEM
       memoist
       rainbow
     cfn_response (0.2.0)
+    composite_primary_keys (13.0.7)
+      activerecord (~> 6.1.0)
     concurrent-ruby (1.2.2)
     crass (1.0.6)
     date (3.3.3)
     diff-lcs (1.5.0)
     dotenv (2.8.1)
     erubi (1.12.0)
+    faraday (2.7.10)
+      faraday-net_http (>= 2.0, < 3.1)
+      ruby2_keywords (>= 0.0.4)
+    faraday-net_http (3.0.2)
     gems (1.2.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -149,6 +155,7 @@ GEM
     jmespath (1.6.2)
     kramdown (2.4.0)
       rexml
+    lockbox (1.3.0)
     loofah (2.21.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
@@ -172,6 +179,7 @@ GEM
       net-protocol
     nokogiri (1.15.4-arm64-darwin)
       racc (~> 1.4)
+    pg (1.5.4)
     racc (1.7.1)
     rack (2.2.8)
     rack-test (2.1.0)
@@ -206,6 +214,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-support (3.12.1)
+    ruby2_keywords (0.0.5)
     serverlessgems (0.4.0)
       gems
       memoist
@@ -224,7 +233,11 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  composite_primary_keys
+  faraday (~> 2.7.10)
   jets (~> 4.0.0)
+  lockbox
+  pg (~> 1.5.4)
   rspec
   zeitwerk (>= 2.5.0)
 

@@ -1,0 +1,25 @@
+---
+default:     &default
+  adapter:   postgresql
+  encoding:  unicode
+  pool:      <%= ENV["DB_POOL"] || 5  %>
+  database:  <%= ENV['DB_NAME'] || 'sensors' %>
+  username:  <%= ENV['DB_USER'] || 'sensors' %>
+  password:  <%= begin IO.read(ENV.fetch("DB_PASSWORD_FILE")) rescue "" end %>
+  host:      <%= ENV["DB_HOST"] %>
+  # takes higher precedence than other settings
+  url:       <%= ENV['DATABASE_URL'] %>
+  reconnect: true
+
+development:
+  <<: *default
+  host:      <%= ENV.fetch("DB_HOST") { "127.0.0.1" } %>
+
+test:
+  <<: *default
+  database:  sensors_test
+
+production:
+  <<: *default
+  database:  sensors_sl_production
+  url:       <%= ENV['DATABASE_URL'] %>
