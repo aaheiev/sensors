@@ -14,6 +14,7 @@ default:     &default
 development:
   <<: *default
   host:      <%= ENV.fetch("DB_HOST") { "127.0.0.1" } %>
+  database:  <%= ENV.fetch("DB_NAME") { "sensors_dev" } %>
 
 test:
   <<: *default

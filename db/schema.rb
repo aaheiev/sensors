@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 2023_09_06_210518) do
   end
 
   create_table "ubibot_auths", id: false, force: :cascade do |t|
-    t.datetime "created_at", default: "2023-09-13 18:46:54"
+    t.datetime "created_at", default: "2023-09-15 17:44:03"
     t.datetime "expired_at"
     t.datetime "server_time"
     t.string "token_ciphertext"

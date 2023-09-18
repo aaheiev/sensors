@@ -8,6 +8,8 @@ gem "pg", "~> 1.5.4"
 gem 'lockbox'
 gem "faraday", "~> 2.7.10"
 gem 'composite_primary_keys'
+gem 'clockwork'
+gem 'parallel'
 
 # development and test groups are not bundled as part of the deployment
 group :development, :test do

@@ -22,4 +22,7 @@ class UbibotAuth < ApplicationRecord
       end
     end
   end
+  def self.cleanup
+    UbibotAuth.where('expired_at < ?', DateTime.now - 2.hour).delete_all
+  end
 end
