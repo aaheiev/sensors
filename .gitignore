@@ -9,7 +9,7 @@
 bundled
 coverage
 pkg
-tmp
+.tmp
 /.secrets
 !/.secrets/.keep
 /.fixtures/
