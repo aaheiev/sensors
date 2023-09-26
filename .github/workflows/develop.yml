@@ -13,6 +13,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+#    - name: Login container registry
+#      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ secrets.WORKFLOWS_GITHUB_USER }}" --password-stdin
 
 #    - name: Build the Docker image
 #      run: |
