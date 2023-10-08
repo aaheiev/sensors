@@ -2,6 +2,9 @@
 
 FROM --platform=linux/amd64 ruby:3.2.2-alpine
 
+ARG build_version=0.0.0
+ENV BUILD_VERSION $build_version
+
 RUN apk update \
     && apk add --no-cache libpq-dev \
     && apk add --no-cache --virtual .build-deps build-base

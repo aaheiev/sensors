@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - 5-develop-ci
-
+env:
+  IMAGE_URL: ghcr.io/aaheiev/sensors
 jobs:
 
   build:
@@ -39,10 +40,13 @@ jobs:
       run: |
         echo "VERSION: ${{ env.VERSION }}"
 
-#    - name: Build the Docker image
-#      run: |
-#        docker build -t sensors .
-#        docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    - name: Build Docker image
+      run: |
+        docker build --build-arg build_version=${{ env.VERSION }} -t ${{ env.IMAGE_URL }}:${{ env.VERSION }} .
+
+    - name: Publish Docker image
+      run: |
+        docker push ${{ env.IMAGE_URL }}:${{ env.VERSION }}
 
 #    - name: Login container registry
 #      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ secrets.WORKFLOWS_GITHUB_USER }}" --password-stdin
