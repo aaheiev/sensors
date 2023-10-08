@@ -29,7 +29,8 @@ jobs:
     - name: Configure job
       id: config
       run: |
-        VERSION="0.0.${{ github.run_number }}-dev"
+        APP_VERSION=$(cat VERSION)
+        VERSION="${APP_VERSION}-${{ github.run_number }}"
         echo "VERSION=$(echo $VERSION)" >> $GITHUB_ENV
         echo "VERSION=$(echo $VERSION)" >> $GITHUB_OUTPUT
         echo "VERSION=$(echo $VERSION)"
