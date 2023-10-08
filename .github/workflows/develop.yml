@@ -11,11 +11,8 @@ jobs:
   build:
     permissions: write-all
     runs-on: ubuntu-latest
-#    runs-on:
-#      - self-hosted
-#      - Linux
-#      - X64
-#      - bkouen
+    outputs:
+      version: ${{ steps.config.outputs.VERSION }}
 
     steps:
     - uses: actions/checkout@v3
@@ -47,3 +44,21 @@ jobs:
     - name: Publish Docker image
       run: |
         docker push ${{ env.IMAGE_URL }}:${{ env.VERSION }}
+
+  deploy:
+    permissions: write-all
+    runs-on:
+      - self-hosted
+      - Linux
+      - X64
+      - bkouen
+    env:
+      VERSION: ${{ needs.build.outputs.VERSION }}
+      DOCKER_COMPOSE_DIR: ${{ vars.DOCKER_COMPOSE_DIR }}
+    steps:
+
+      - name: Show version
+        run: |
+          echo "VERSION: ${{ env.VERSION }}"
+          echo "DOCKER_COMPOSE_DIR: ${{ env.DOCKER_COMPOSE_DIR }}"
+
