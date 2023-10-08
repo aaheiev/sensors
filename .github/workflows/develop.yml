@@ -10,11 +10,12 @@ jobs:
 
   build:
     permissions: write-all
-    runs-on:
-      - self-hosted
-      - Linux
-      - X64
-      - bkouen
+    runs-on: ubuntu-latest
+#    runs-on:
+#      - self-hosted
+#      - Linux
+#      - X64
+#      - bkouen
 
     steps:
     - uses: actions/checkout@v3
