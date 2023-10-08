@@ -3,7 +3,7 @@ name: Docker Image CI
 on:
   push:
     branches:
-      - 5-develop-ci
+      - main
 env:
   IMAGE_URL: ghcr.io/aaheiev/sensors
 jobs:
