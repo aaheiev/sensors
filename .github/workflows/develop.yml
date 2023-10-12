@@ -17,33 +17,33 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Configure job
-      id: config
-      run: |
-        APP_VERSION=$(cat VERSION)
-        VERSION="${APP_VERSION}-dev.${{ github.run_number }}"
-        echo "VERSION=$(echo $VERSION)" >> $GITHUB_ENV
-        echo "VERSION=$(echo $VERSION)" >> $GITHUB_OUTPUT
-        echo "VERSION=$(echo $VERSION)"
-
-    - name: Show version
-      run: |
-        echo "VERSION: ${{ env.VERSION }}"
-
-    - name: Build Docker image
-      run: |
-        docker build --build-arg build_version=${{ env.VERSION }} -t ${{ env.IMAGE_URL }}:${{ env.VERSION }} .
-
-    - name: Publish Docker image
-      run: |
-        docker push ${{ env.IMAGE_URL }}:${{ env.VERSION }}
+#    - name: Login to GitHub Container Registry
+#      uses: docker/login-action@v3
+#      with:
+#        registry: ghcr.io
+#        username: ${{ github.actor }}
+#        password: ${{ secrets.GITHUB_TOKEN }}
+#
+#    - name: Configure job
+#      id: config
+#      run: |
+#        APP_VERSION=$(cat VERSION)
+#        VERSION="${APP_VERSION}-dev.${{ github.run_number }}"
+#        echo "VERSION=$(echo $VERSION)" >> $GITHUB_ENV
+#        echo "VERSION=$(echo $VERSION)" >> $GITHUB_OUTPUT
+#        echo "VERSION=$(echo $VERSION)"
+#
+#    - name: Show version
+#      run: |
+#        echo "VERSION: ${{ env.VERSION }}"
+#
+#    - name: Build Docker image
+#      run: |
+#        docker build --build-arg build_version=${{ env.VERSION }} -t ${{ env.IMAGE_URL }}:${{ env.VERSION }} .
+#
+#    - name: Publish Docker image
+#      run: |
+#        docker push ${{ env.IMAGE_URL }}:${{ env.VERSION }}
 
   deploy:
     permissions: write-all
@@ -55,7 +55,8 @@ jobs:
       - X64
       - bkouen
     env:
-      VERSION: ${{ needs.build.outputs.VERSION }}
+#      VERSION: ${{ needs.build.outputs.VERSION }}
+      VERSION: 0.0.1-dev.19
       DOCKER_COMPOSE_DIR: ${{ vars.DOCKER_COMPOSE_DIR }}
     steps:
       - name: Pull container image
