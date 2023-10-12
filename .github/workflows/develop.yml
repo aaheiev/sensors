@@ -58,9 +58,11 @@ jobs:
       VERSION: ${{ needs.build.outputs.VERSION }}
       DOCKER_COMPOSE_DIR: ${{ vars.DOCKER_COMPOSE_DIR }}
     steps:
+      - name: Pull container image
+        run: docker pull ${{ env.IMAGE_URL }}:${{ env.VERSION }}
 
-      - name: Show version
-        run: |
-          echo "VERSION: ${{ env.VERSION }}"
-          echo "DOCKER_COMPOSE_DIR: ${{ env.DOCKER_COMPOSE_DIR }}"
+#      - name: Show version
+#        run: |
+#          echo "VERSION: ${{ env.VERSION }}"
+#          echo "DOCKER_COMPOSE_DIR: ${{ env.DOCKER_COMPOSE_DIR }}"
 
