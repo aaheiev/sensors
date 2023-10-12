@@ -61,16 +61,18 @@ jobs:
     steps:
       - name: Pull container image
         run: docker pull ${{ env.IMAGE_URL }}:${{ env.VERSION }}
+
       - name: Debug
         run: |
           echo ${{ env.IMAGE_URL }}:${{ env.VERSION }}
           cat "../../../../../../${{ env.DOCKER_COMPOSE_DIR }}/docker-compose.yaml"
-#      - name: Update docker-compose.yaml
-#        uses: fjogeleit/yaml-update-action@main
-#        with:
-#          valueFile: "../../../../../../${{ env.DOCKER_COMPOSE_DIR }}/docker-compose.yaml"
-#          propertyPath: 'services.scheduler.image'
-#          value: ${{ env.IMAGE_URL }}:${{ env.VERSION }}
+
+      - name: Update docker-compose.yaml
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: ../../../../../../${{ env.DOCKER_COMPOSE_DIR }}/docker-compose.yaml
+          propertyPath: services.scheduler.image
+          value: ${{ env.IMAGE_URL }}:${{ env.VERSION }}
 
 #      - name: Show version
 #        run: |
