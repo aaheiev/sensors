@@ -64,7 +64,7 @@ jobs:
       - name: Debug
         run: |
           echo ${{ env.IMAGE_URL }}:${{ env.VERSION }}
-
+          cat "../../../../../../${{ env.DOCKER_COMPOSE_DIR }}/docker-compose.yaml"
 #      - name: Update docker-compose.yaml
 #        uses: fjogeleit/yaml-update-action@main
 #        with:
