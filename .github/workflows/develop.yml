@@ -8,15 +8,15 @@ env:
   IMAGE_URL: ghcr.io/aaheiev/sensors
 jobs:
 
-  build:
-    permissions: write-all
-    runs-on: ubuntu-latest
-    outputs:
-      version: ${{ steps.config.outputs.VERSION }}
-
-    steps:
-    - uses: actions/checkout@v3
-
+#  build:
+#    permissions: write-all
+#    runs-on: ubuntu-latest
+#    outputs:
+#      version: ${{ steps.config.outputs.VERSION }}
+#
+#    steps:
+#    - uses: actions/checkout@v3
+#
 #    - name: Login to GitHub Container Registry
 #      uses: docker/login-action@v3
 #      with:
@@ -47,7 +47,7 @@ jobs:
 
   deploy:
     permissions: write-all
-    needs: [build]
+#    needs: [build]
     environment: dev
     runs-on:
       - self-hosted
