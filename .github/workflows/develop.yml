@@ -57,22 +57,27 @@ jobs:
     env:
 #      VERSION: ${{ needs.build.outputs.VERSION }}
       VERSION: 0.0.1-dev.19
-      DOCKER_COMPOSE_DIR: ${{ vars.DOCKER_COMPOSE_DIR }}
+      DOCKER_COMPOSE_DIR: ../../../../../../${{ vars.DOCKER_COMPOSE_DIR }}
     steps:
       - name: Pull container image
         run: docker pull ${{ env.IMAGE_URL }}:${{ env.VERSION }}
 
-      - name: Debug
-        run: |
-          echo ${{ env.IMAGE_URL }}:${{ env.VERSION }}
-          cat "../../../../../../${{ env.DOCKER_COMPOSE_DIR }}/docker-compose.yaml"
+#      - name: Debug
+#        run: |
+#          echo ${{ env.IMAGE_URL }}:${{ env.VERSION }}
+#          cat "../../../../../../${{ env.DOCKER_COMPOSE_DIR }}/docker-compose.yaml"
 
       - name: Update docker-compose.yaml
         uses: fjogeleit/yaml-update-action@main
         with:
-          valueFile: ../../../../../../${{ env.DOCKER_COMPOSE_DIR }}/docker-compose.yaml
+          valueFile: ${{ env.DOCKER_COMPOSE_DIR }}/docker-compose.yaml
           propertyPath: services.scheduler.image
           value: ${{ env.IMAGE_URL }}:${{ env.VERSION }}
+
+      - name: Start app
+        working-directory: ${{ env.DOCKER_COMPOSE_DIR }}
+        run: |
+          docker compose up -d
 
 #      - name: Show version
 #        run: |
