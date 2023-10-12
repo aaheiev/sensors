@@ -8,64 +8,56 @@ env:
   IMAGE_URL: ghcr.io/aaheiev/sensors
 jobs:
 
-#  build:
-#    permissions: write-all
-#    runs-on: ubuntu-latest
-#    outputs:
-#      version: ${{ steps.config.outputs.VERSION }}
-#
-#    steps:
-#    - uses: actions/checkout@v3
-#
-#    - name: Login to GitHub Container Registry
-#      uses: docker/login-action@v3
-#      with:
-#        registry: ghcr.io
-#        username: ${{ github.actor }}
-#        password: ${{ secrets.GITHUB_TOKEN }}
-#
-#    - name: Configure job
-#      id: config
-#      run: |
-#        APP_VERSION=$(cat VERSION)
-#        VERSION="${APP_VERSION}-dev.${{ github.run_number }}"
-#        echo "VERSION=$(echo $VERSION)" >> $GITHUB_ENV
-#        echo "VERSION=$(echo $VERSION)" >> $GITHUB_OUTPUT
-#        echo "VERSION=$(echo $VERSION)"
-#
-#    - name: Show version
-#      run: |
-#        echo "VERSION: ${{ env.VERSION }}"
-#
-#    - name: Build Docker image
-#      run: |
-#        docker build --build-arg build_version=${{ env.VERSION }} -t ${{ env.IMAGE_URL }}:${{ env.VERSION }} .
-#
-#    - name: Publish Docker image
-#      run: |
-#        docker push ${{ env.IMAGE_URL }}:${{ env.VERSION }}
+  build:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.config.outputs.VERSION }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Configure job
+      id: config
+      run: |
+        APP_VERSION=$(cat VERSION)
+        VERSION="${APP_VERSION}-dev.${{ github.run_number }}"
+        echo "VERSION=$(echo $VERSION)" >> $GITHUB_ENV
+        echo "VERSION=$(echo $VERSION)" >> $GITHUB_OUTPUT
+        echo "VERSION=$(echo $VERSION)"
+
+    - name: Show version
+      run: |
+        echo "VERSION: ${{ env.VERSION }}"
+
+    - name: Build Docker image
+      run: |
+        docker build --build-arg build_version=${{ env.VERSION }} -t ${{ env.IMAGE_URL }}:${{ env.VERSION }} .
+
+    - name: Publish Docker image
+      run: |
+        docker push ${{ env.IMAGE_URL }}:${{ env.VERSION }}
 
   deploy:
     permissions: write-all
-#    needs: [build]
+    needs: [build]
     environment: dev
     runs-on:
       - self-hosted
-      - Linux
-      - X64
       - bkouen
     env:
-#      VERSION: ${{ needs.build.outputs.VERSION }}
-      VERSION: 0.0.1-dev.19
+      VERSION: ${{ needs.build.outputs.VERSION }}
       DOCKER_COMPOSE_DIR: ../../../../../../${{ vars.DOCKER_COMPOSE_DIR }}
     steps:
       - name: Pull container image
         run: docker pull ${{ env.IMAGE_URL }}:${{ env.VERSION }}
-
-#      - name: Debug
-#        run: |
-#          echo ${{ env.IMAGE_URL }}:${{ env.VERSION }}
-#          cat "../../../../../../${{ env.DOCKER_COMPOSE_DIR }}/docker-compose.yaml"
 
       - name: Update docker-compose.yaml
         uses: fjogeleit/yaml-update-action@main
@@ -78,9 +70,3 @@ jobs:
         working-directory: ${{ env.DOCKER_COMPOSE_DIR }}
         run: |
           docker compose up -d
-
-#      - name: Show version
-#        run: |
-#          echo "VERSION: ${{ env.VERSION }}"
-#          echo "DOCKER_COMPOSE_DIR: ${{ env.DOCKER_COMPOSE_DIR }}"
-
