@@ -65,7 +65,7 @@ jobs:
       - name: Update docker-compose.yaml
         uses: fjogeleit/yaml-update-action@main
         with:
-          valueFile: "../../../../${{ env.DOCKER_COMPOSE_DIR }}/docker-compose.yaml"
+          valueFile: "../../../../../../${{ env.DOCKER_COMPOSE_DIR }}/docker-compose.yaml"
           propertyPath: 'services.scheduler.image'
           value: ${{ env.IMAGE_URL }}:${{ env.VERSION }}
 
