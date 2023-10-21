@@ -22,5 +22,6 @@ test:
 
 production:
   <<: *default
-  database:  sensors_sl_production
-  url:       <%= ENV['DATABASE_URL'] %>
+  database:  <%= ENV.fetch("DB_NAME") { "sensors" } %>
+  host:      <%= ENV.fetch("DB_HOST") { "127.0.0.1" } %>
+#  url:       <%= ENV['DATABASE_URL'] %>
