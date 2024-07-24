@@ -15,13 +15,17 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  database:  <%= ENV['DB_NAME'] || 'sensors' %>
+  username:  <%= ENV['DB_USER'] || 'sensors' %>
+  password:  <%= begin IO.read(ENV.fetch("DB_PASSWORD_FILE")) rescue "" end %>
+  host:      <%= ENV["DB_HOST"] %>
+  # takes higher precedence than other settings
+  url:       <%= ENV['DATABASE_URL'] %>
+  reconnect: true
 
 development:
   <<: *default
-  database: sensors_development
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -79,6 +83,3 @@ test:
 #
 production:
   <<: *default
-  database: sensors_production
-  username: sensors
-  password: <%= ENV["SENSORS_DATABASE_PASSWORD"] %>
