@@ -1,0 +1,60 @@
+---
+ubibot_channels:
+  "52492":
+    sensor_type: WS1
+    name:        WS1Pro inside top
+    location:    inside top
+    tags:
+      - inside
+      - inside-top
+  "52500":
+    sensor_type: WS1
+    name:        WS1 inside Kateryna's room
+    location:    inside Kateryna's room
+    tags:
+      - inside
+      - inside-bottom
+  "52545":
+    sensor_type: WS1
+    name:        WS1 outside front
+    location:    outside front
+    tags:
+      - outside
+      - outside-front
+  "52546":
+    sensor_type: WS1
+    name:        WS1 outside back
+    location:    outside back
+    tags:
+      - outside
+      - outside-back
+  "55295":
+    sensor_type: WS1
+    name:        WS1 inside living room
+    location:    inside living room
+    tags:
+      - inside
+      - living-room
+  "55296":
+    sensor_type: WS1
+    name:        WS1 inside Kyrylo's room
+    location:    inside Kyrylo's room
+    tags:
+      - inside
+      - kyrylo-room
+  "52895":
+    sensor_type: SP1
+    name:        SP1 living room
+    location:    living room
+  "52898":
+    sensor_type: SP1
+    name:        SP1 Andrii's office
+    location:    Andrii's office
+  "52899":
+    sensor_type: SP1
+    name:        SP1 Kyrylo's room
+    location:    Kyrylo's room
+  "52901":
+    sensor_type: SP1
+    name:        SP1 laundry
+    location:    laundry

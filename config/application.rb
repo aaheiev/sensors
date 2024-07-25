@@ -28,5 +28,7 @@ module Sensors
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.ubibot_auth_url = "https://api.ubibot.com/accounts/generate_access_token"
+    config.ubibot_channels_url = "https://api.ubibot.com/channels"
   end
 end
