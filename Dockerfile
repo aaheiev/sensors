@@ -1,11 +1,11 @@
-# syntax = docker/dockerfile:1
-
+# docker build -t sensors .
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
 ARG RUBY_VERSION=3.3.4
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
-# Rails app lives here
-WORKDIR /rails
+FROM --platform=linux/amd64 ruby:$RUBY_VERSION-alpine
+
+ARG build_version=0.0.0
+ENV BUILD_VERSION $build_version
 
 # Set production environment
 ENV RAILS_ENV="production" \
@@ -13,47 +13,24 @@ ENV RAILS_ENV="production" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development"
 
+RUN apk update \
+    && apk add --no-cache libpq-dev \
+    && apk add --no-cache --virtual .build-deps build-base
 
-# Throw-away build stage to reduce size of final image
-FROM base as build
+RUN apk add --no-cache tzdata
 
-# Install packages needed to build gems
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips pkg-config
+RUN mkdir /sensors
+WORKDIR /sensors
+COPY . /sensors/
+RUN bundle install \
+    && gem install tzinfo-data
 
-# Install application gems
-COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
-
-# Copy application code
-COPY . .
-
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
-
-
-# Final stage for app image
-FROM base
-
-# Install packages needed for deployment
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libvips postgresql-client && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# Copy built artifacts: gems, application
-COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build /rails /rails
+RUN apk del .build-deps;
 
 # Run and own only the runtime files as a non-root user for security
-RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-USER rails:rails
+RUN adduser -D sensors \
+    && chown -R sensors:sensors /sensors db log storage tmp
+USER sensors:sensors
 
 # Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-
-# Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
-CMD ["./bin/rails", "server"]
+#ENTRYPOINT ["/sensors/bin/docker-entrypoint"]

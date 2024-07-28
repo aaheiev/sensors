@@ -1,34 +1,23 @@
 secrets:
-  db_password:
-    file: .secrets/db-password
+  sensors_db_password:
+    file: .secrets/sensors-db-password
 services:
-#  grafana:
-#    image: grafana/grafana:11.0.0
-#    depends_on:
-#      - db
-#    ports:
-#      - 3000:3000
-#    restart: unless-stopped
-#    volumes:
-#      - ./.data/grafana:/var/lib/grafana
-#      - ./grafana/grafana.ini:/etc/grafana/grafana.ini:ro
-  db:
-    image: timescale/timescaledb:latest-pg${POSTGRES_VERSION:-16}-oss
+  scheduler:
+    image: sensors:1.0.0
+    build: .
+    platform: linux/amd64
+    restart: unless-stopped
+#    stdin_open: true
+#    tty: true
+    command:
+      - bundle
+      - exec
+      - clockwork
+      - scheduler.rb
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-sensors}
-      POSTGRES_USER: ${POSTGRES_USER:-sensors}
-      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
-    healthcheck:
-      test: [ "CMD", "pg_isready", "-d", "${POSTGRES_DB:-sensors}", "-U", "${POSTGRES_USER:-sensors}" ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-      start_period: 30s
-    volumes:
-      - ./.data/db:/var/lib/postgresql/data:rw
-#      - ./scripts/grafana-create-db-and-user.sh://docker-entrypoint-initdb.d/002_grafana_create_db_and_user.sh:ro
-    ports:
-      - 5432:5432
+      RAILS_ENV: production
+      DB_PASSWORD_FILE: /run/secrets/sensors_db_password
+    env_file:
+      - .env
     secrets:
-      - db_password
-#    command: postgres -c 'max_connections=1000'
+      - sensors_db_password

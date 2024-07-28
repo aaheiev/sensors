@@ -1,8 +1,11 @@
-#!/bin/bash -e
+#!/bin/sh
+
+#echo "1: ${1}"
+#echo "2: ${2}"
 
 # If running the rails server then create or migrate existing database
-if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  ./bin/rails db:prepare
-fi
+#if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
+#  ./bin/rails db:prepare
+#fi
 
-exec "${@}"
+#exec "${@}"
