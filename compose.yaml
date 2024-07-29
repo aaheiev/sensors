@@ -1,6 +1,8 @@
 secrets:
   sensors_db_password:
     file: .secrets/sensors-db-password
+  ubibot_account_key:
+    file: .secrets/ubibot-account-key
 services:
   scheduler:
     image: sensors:1.0.0
@@ -17,7 +19,10 @@ services:
     environment:
       RAILS_ENV: production
       DB_PASSWORD_FILE: /run/secrets/sensors_db_password
+      UBIBOT_ACCOUNT_KEY_FILE: /run/secrets/ubibot_account_key
     env_file:
       - .env
     secrets:
       - sensors_db_password
+      - ubibot_account_key
+#  ps aux | grep scheduler.rb | grep -v grep

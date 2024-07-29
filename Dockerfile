@@ -33,4 +33,4 @@ RUN adduser -D sensors \
 USER sensors:sensors
 
 # Entrypoint prepares the database.
-#ENTRYPOINT ["/sensors/bin/docker-entrypoint"]
+ENTRYPOINT ["/sensors/bin/docker-entrypoint"]
