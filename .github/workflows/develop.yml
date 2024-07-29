@@ -28,7 +28,7 @@ jobs:
       id: config
       run: |
         APP_VERSION=$(cat VERSION)
-        VERSION="${APP_VERSION}-dev.${{ github.run_number }}"
+        VERSION="${APP_VERSION}-${{ github.run_number }}.${{ github.run_attempt }}"
         echo "VERSION=$(echo $VERSION)" >> $GITHUB_ENV
         echo "VERSION=$(echo $VERSION)" >> $GITHUB_OUTPUT
         echo "VERSION=$(echo $VERSION)"
