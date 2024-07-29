@@ -29,7 +29,7 @@ RUN apk del .build-deps;
 
 # Run and own only the runtime files as a non-root user for security
 RUN adduser -D sensors \
-    && chown -R sensors:sensors /sensors db log storage tmp
+    && chown -R sensors:sensors /sensors
 USER sensors:sensors
 
 # Entrypoint prepares the database.
