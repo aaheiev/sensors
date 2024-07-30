@@ -1,8 +1,8 @@
-CSV_FILES_SEARCH_PATH = "#{Rails.root}/.data/100/*.csv"
+CSV_FILES_SEARCH_PATH = "#{Rails.root}/.data/*.csv"
 THREADS = 10
 
 # export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
-# rake load:json
+# rake load:csv
 namespace :load do
   desc 'Import data from JSON files'
   task csv: :environment do
