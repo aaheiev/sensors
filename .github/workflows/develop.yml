@@ -1,0 +1,46 @@
+name: Build docker image
+
+on:
+  push:
+    branches:
+      - develop
+env:
+  IMAGE_URL: ghcr.io/aaheiev/sensors
+jobs:
+
+  build:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.config.outputs.VERSION }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Configure job
+      id: config
+      run: |
+        APP_VERSION=$(cat VERSION)
+        VERSION="${APP_VERSION}-${{ github.run_number }}.${{ github.run_attempt }}"
+        echo "VERSION=$(echo $VERSION)" >> $GITHUB_ENV
+        echo "VERSION=$(echo $VERSION)" >> $GITHUB_OUTPUT
+        echo "VERSION=$(echo $VERSION)"
+
+#    - name: Show version
+#      run: |
+#        echo "VERSION: ${{ env.VERSION }}"
+#
+    - name: Build Docker image
+      run: |
+        docker build --build-arg build_version=${{ env.VERSION }} -t ${{ env.IMAGE_URL }}:${{ env.VERSION }} .
+
+    - name: Publish Docker image
+      run: |
+        docker push ${{ env.IMAGE_URL }}:${{ env.VERSION }}
