@@ -1,4 +1,15 @@
 # See https://docs.docker.com/engine/reference/builder/#dockerignore-file for more about ignoring files.
+/.data/
+/.idea/
+/.secrets/
+/.tmp/
+.env
+.env*
+.DS_Store
+.dockerignore
+.gitattributes
+.gitignore
+Dockerfile
 
 # Ignore git directory.
 /.git/

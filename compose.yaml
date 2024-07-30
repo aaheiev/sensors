@@ -1,34 +1,76 @@
 secrets:
-  db_password:
-    file: .secrets/db-password
+  ubibot_account_key:
+    file: .secrets/ubibot-account-key
+  grafana_admin_password:
+    file: .secrets/grafana-admin-password
+  grafana_db_password:
+    file: .secrets/grafana-db-password
+  grafana_secret_key:
+    file: .secrets/grafana-secret-key
+  grafana_auth_google_client_id:
+    file: .secrets/grafana-auth-google-client-id
+  grafana_auth_google_client_secret:
+    file: .secrets/grafana-auth-google-client-secret
+  sensors_rails_master_key:
+    file: .secrets/sensors-rails-master-key
+  sensors_db_password:
+    file: .secrets/sensors-db-password
+
 services:
-#  grafana:
-#    image: grafana/grafana:11.0.0
-#    depends_on:
-#      - db
-#    ports:
-#      - 3000:3000
-#    restart: unless-stopped
-#    volumes:
-#      - ./.data/grafana:/var/lib/grafana
-#      - ./grafana/grafana.ini:/etc/grafana/grafana.ini:ro
-  db:
-    image: timescale/timescaledb:latest-pg${POSTGRES_VERSION:-16}-oss
+  grafana:
+    image: grafana/grafana:11.0.0
+    ports:
+      - 3000:3000
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-sensors}
-      POSTGRES_USER: ${POSTGRES_USER:-sensors}
-      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      GF_DATABASE_PASSWORD__FILE: /run/secrets/grafana_db_password
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin_password
+      GF_SECURITY_SECRET_KEY__FILE: /run/secrets/grafana_secret_key
+      GF_DATABASE_HOST: 172.17.0.1:5432
+      GF_DATABASE_NAME: grafana
+      GF_DATABASE_USER: grafana
+      GF_AUTH_GOOGLE_CLIENT_ID__FILE: /run/secrets/grafana_auth_google_client_id
+      GF_AUTH_GOOGLE_CLIENT_SECRET__FILE: /run/secrets/grafana_auth_google_client_secret
+    secrets:
+      - grafana_admin_password
+      - grafana_db_password
+      - grafana_secret_key
+      - grafana_auth_google_client_id
+      - grafana_auth_google_client_secret
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini:ro
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+
+  scheduler:
+    image: ghcr.io/aaheiev/sensors:1.0.1-37.1
+    platform: linux/amd64
+    environment:
+      RAILS_ENV: production
+      DB_HOST: 172.17.0.1
+      DB_NAME: sensors
+      DB_USER: sensors
+      DB_PASSWORD_FILE: /run/secrets/sensors_db_password
+      UBIBOT_ACCOUNT_KEY_FILE: /run/secrets/ubibot_account_key
+      RAILS_MASTER_KEY_FILE: /run/secrets/sensors_rails_master_key
+    command:
+      - bundle
+      - exec
+      - clockwork
+      - scheduler.rb
+    secrets:
+      - sensors_db_password
+      - sensors_rails_master_key
+      - ubibot_account_key
     healthcheck:
-      test: [ "CMD", "pg_isready", "-d", "${POSTGRES_DB:-sensors}", "-U", "${POSTGRES_USER:-sensors}" ]
+      test:
+        - CMD
+        - ps aux | grep scheduler.rb | grep -v grep
       interval: 5s
       timeout: 5s
       retries: 5
-      start_period: 30s
-    volumes:
-      - ./.data/db:/var/lib/postgresql/data:rw
-#      - ./scripts/grafana-create-db-and-user.sh://docker-entrypoint-initdb.d/002_grafana_create_db_and_user.sh:ro
-    ports:
-      - 5432:5432
-    secrets:
-      - db_password
-#    command: postgres -c 'max_connections=1000'
+    restart: unless-stopped
+
+volumes:
+  grafana_data: {}
