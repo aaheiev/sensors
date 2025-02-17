@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
-ruby '3.3.4'
+ruby '3.3.5'
 
+gem 'bcrypt', '~> 3.1.7'
 gem 'pg', '~> 1.5'
 gem 'puma', '>= 5.0'
 gem 'rails', '~> 7.1.3', '>= 7.1.3.4'
-gem 'bcrypt', '~> 3.1.7'
 gem 'tzinfo-data', platforms: %i[windows jruby]
 # gem 'tzinfo-data'#, platforms: [:mingw, :mswin, :x64_mingw]
 

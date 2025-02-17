@@ -4,6 +4,7 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   database:  <%= ENV['DB_NAME'] || 'sensors' %>
   username:  <%= ENV['DB_USER'] || 'sensors' %>
+  port:      <%= ENV['DB_PORT'] || '5432' %>
   password:  <%= begin IO.read(ENV.fetch("DB_PASSWORD_FILE")) rescue "" end %>
   host:      <%= ENV["DB_HOST"] %>
   # takes higher precedence than other settings
