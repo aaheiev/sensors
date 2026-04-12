@@ -1,6 +1,6 @@
 # docker build -t sensors .
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.3.5
+ARG RUBY_VERSION=3.4.8
 
 FROM --platform=linux/amd64 ruby:$RUBY_VERSION-alpine
 
@@ -14,16 +14,17 @@ ENV RAILS_ENV="production" \
     BUNDLE_WITHOUT="development"
 
 RUN apk update \
-    && apk add --no-cache libpq-dev \
-    && apk add --no-cache --virtual .build-deps build-base
+  && apk add --no-cache --virtual .build-deps build-base libpq-dev yaml-dev pkgconfig
 
 RUN apk add --no-cache tzdata
 
 RUN mkdir /sensors
 WORKDIR /sensors
 COPY . /sensors/
-RUN bundle install \
-    && gem install tzinfo-data
+
+RUN gem update --system \
+  && bundle config set --local without 'development test' \
+  && bundle install
 
 RUN apk del .build-deps;
 
