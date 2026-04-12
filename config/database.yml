@@ -1,12 +1,12 @@
 default: &default
-  adapter: postgresql
-  encoding: unicode
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  adapter:   postgresql
+  encoding:  unicode
+  pool:      <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   database:  <%= ENV['DB_NAME'] || 'sensors' %>
   username:  <%= ENV['DB_USER'] || 'sensors' %>
   port:      <%= ENV['DB_PORT'] || '5432' %>
   password:  <%= begin IO.read(ENV.fetch("DB_PASSWORD_FILE")) rescue "" end %>
-  host:      <%= ENV["DB_HOST"] %>
+  host:      <%= ENV["DB_HOST"] || '127.0.0.1' %>
   # takes higher precedence than other settings
   url:       <%= ENV['DATABASE_URL'] %>
   reconnect: true

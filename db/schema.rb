@@ -48,7 +48,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_24_184354) do
   end
 
   create_table "ubibot_auths", id: false, force: :cascade do |t|
-    t.datetime "created_at", precision: nil, default: "2025-02-17 16:43:20", null: false
+    t.datetime "created_at", precision: nil, default: "2025-07-16 20:09:26", null: false
     t.datetime "expired_at", precision: nil, null: false
     t.datetime "server_time", precision: nil, null: false
     t.string "token", null: false

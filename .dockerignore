@@ -3,6 +3,11 @@
 /.idea/
 /.secrets/
 /.tmp/
+/.github/
+/.database/
+/.ruby-lsp/
+/data-export/
+/log/*.log
 .env
 .env*
 .DS_Store
@@ -10,6 +15,8 @@
 .gitattributes
 .gitignore
 Dockerfile
+compose.yaml
+.tmp/notes.md
 
 # Ignore git directory.
 /.git/
