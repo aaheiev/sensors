@@ -29,6 +29,7 @@ module Sensors
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
     config.ubibot_auth_url = 'https://api.ubibot.com/accounts/generate_access_token'
+    config.ubibot_auth_tocken = IO.read(ENV.fetch("UBIBOT_ACCOUNT_KEY_FILE"))
     config.ubibot_channels_url = 'https://api.ubibot.com/channels'
     # config.google_cloud.project_id = 'bijlmerdreef-733'
     # config.google_cloud.use_logging = true

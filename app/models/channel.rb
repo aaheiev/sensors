@@ -3,6 +3,8 @@ class Channel < ApplicationRecord
   has_many :measurements
   def update_channel
     channel_data = channel_data()
+    puts channel_data
+
     has_data_updates = false
     JSON.parse(channel_data['channel']['last_values']).each do |key, value|
       next unless key.starts_with?('field')
@@ -36,6 +38,7 @@ class Channel < ApplicationRecord
     channel_data_url = "#{Rails.application.config.ubibot_channels_url}/#{id}?token_id=#{UbibotAuth.get_token}"
     ubibot_channel_data_url = URI.parse(channel_data_url)
     response = Faraday.get(ubibot_channel_data_url)
+    puts response.body
     JSON.parse(response.body) if response.status == 200
   end
 end
