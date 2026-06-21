@@ -1,7 +1,6 @@
 class UbibotAuth < ApplicationRecord
   encrypts :token
-  @ubibot_auth_url = "#{Rails.application.config.ubibot_auth_url}?account_key=#{ ENV["UBIBOT_ACCOUNT_KEY"]}"
-
+  @ubibot_auth_url = "#{Rails.application.config.ubibot_auth_url}?account_key=#{ Rails.application.config.ubibot_auth_tocken }"
   def self.get_token
     Rails.logger.info "Requested UbiBot auth_token"
     last_auth = UbibotAuth.where("expired_at > :current_timestamp",{current_timestamp: DateTime.now}).order(expired_at: :desc).first
@@ -19,6 +18,10 @@ class UbibotAuth < ApplicationRecord
         )
         Rails.logger.info "Save new UbiBot auth_token"
         return auth.token
+      else
+        throw "UbiBot auth_token request failed"
+        raise StandardError, "Something went wrong"
+        exit 1
       end
     end
   end

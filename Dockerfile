@@ -2,10 +2,10 @@
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
 ARG RUBY_VERSION=3.4.8
 
-FROM --platform=linux/amd64 ruby:$RUBY_VERSION-alpine
+FROM ruby:$RUBY_VERSION-alpine
 
 ARG build_version=0.0.0
-ENV BUILD_VERSION $build_version
+ENV BUILD_VERSION=$build_version
 
 # Set production environment
 ENV RAILS_ENV="production" \
