@@ -37,3 +37,7 @@
 .tmp
 .idea
 data-export
+.DS_Store
+.secrets
+.data
+.database
