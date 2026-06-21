@@ -33,3 +33,11 @@
 /config/master.key
 .secrets
 .data
+.database
+.tmp
+.idea
+data-export
+.DS_Store
+.secrets
+.data
+.database

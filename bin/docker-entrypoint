@@ -1,8 +1,15 @@
-#!/bin/bash -e
+#!/bin/sh
+set -e
+
+[[ -f "$DB_PASSWORD_FILE" ]] && export DB_PASS=$(cat $DB_PASSWORD_FILE)
+[[ -f "$RAILS_MASTER_KEY_FILE" ]] && export RAILS_MASTER_KEY=$(cat $RAILS_MASTER_KEY_FILE)
+[[ -f "$UBIBOT_ACCOUNT_KEY_FILE" ]] && export UBIBOT_ACCOUNT_KEY=$(cat $UBIBOT_ACCOUNT_KEY_FILE)
+
+exec "$@"
 
 # If running the rails server then create or migrate existing database
-if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  ./bin/rails db:prepare
-fi
+#if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
+#  ./bin/rails db:prepare
+#fi
 
-exec "${@}"
+#exec "${@}"

@@ -1,34 +1,38 @@
+---
 secrets:
-  db_password:
-    file: .secrets/db-password
+  ubibot_account_key:
+    file: .secrets/ubibot-account-key
+  sensors_rails_master_key:
+    file: .secrets/sensors-rails-master-key
+  sensors_db_password:
+    file: .secrets/sensors-db-password
 services:
-#  grafana:
-#    image: grafana/grafana:11.0.0
-#    depends_on:
-#      - db
-#    ports:
-#      - 3000:3000
-#    restart: unless-stopped
-#    volumes:
-#      - ./.data/grafana:/var/lib/grafana
-#      - ./grafana/grafana.ini:/etc/grafana/grafana.ini:ro
-  db:
-    image: timescale/timescaledb:latest-pg${POSTGRES_VERSION:-16}-oss
+  scheduler:
+    image: ghcr.io/aaheiev/sensors:1.1.0-1
+    platform: linux/amd64
+    container_name: scheduler
+    build:
+      dockerfile: Dockerfile
+      context: .
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-sensors}
-      POSTGRES_USER: ${POSTGRES_USER:-sensors}
-      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      RAILS_ENV: production
+      DB_USER: sensors
+      DB_PASSWORD_FILE: /run/secrets/sensors_db_password
+      DB_HOST: 192.168.118.106
+      UBIBOT_ACCOUNT_KEY_FILE: /run/secrets/ubibot_account_key
+      RAILS_MASTER_KEY_FILE: /run/secrets/sensors_rails_master_key
+    command:
+      - bundle
+      - exec
+      - clockwork
+      - scheduler.rb
+    secrets:
+      - sensors_db_password
+      - sensors_rails_master_key
+      - ubibot_account_key
     healthcheck:
-      test: [ "CMD", "pg_isready", "-d", "${POSTGRES_DB:-sensors}", "-U", "${POSTGRES_USER:-sensors}" ]
+      test: ps aux | grep scheduler.rb | grep -v grep
       interval: 5s
       timeout: 5s
       retries: 5
-      start_period: 30s
-    volumes:
-      - ./.data/db:/var/lib/postgresql/data:rw
-#      - ./scripts/grafana-create-db-and-user.sh://docker-entrypoint-initdb.d/002_grafana_create_db_and_user.sh:ro
-    ports:
-      - 5432:5432
-    secrets:
-      - db_password
-#    command: postgres -c 'max_connections=1000'
+    restart: unless-stopped
